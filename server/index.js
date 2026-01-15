@@ -4,6 +4,7 @@ const PORT = 5000;
 import { connectDb } from './config/db.js';
 import dotenv from 'dotenv'
 import userRoutes from './routes/userRoutes.js'
+import monitorRoutes from './routes/monitorRoutes.js'
 
 dotenv.config()
 app.use(express.json())
@@ -13,6 +14,8 @@ app.get('/',(req,res)=>{
 })
 
 app.use('/api/users', userRoutes)
+app.use('/api/monitors', monitorRoutes)
+
 connectDb()
 
 app.listen(PORT,()=>{
