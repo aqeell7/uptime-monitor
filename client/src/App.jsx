@@ -3,6 +3,7 @@ import { Toaster } from "react-hot-toast";
 import Login from "./pages/Login";
 import { Register } from "./pages/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Navbar from "./components/Navbar";
 
 const Dashboard = () => (
   <div className="p-10">
@@ -14,6 +15,7 @@ const Dashboard = () => (
 function App(){
   return(
     <BrowserRouter>
+      <Navbar/>
       <Toaster position="top-right" />
 
       <Routes>
