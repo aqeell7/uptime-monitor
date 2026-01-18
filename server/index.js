@@ -6,6 +6,13 @@ import dotenv from 'dotenv'
 import userRoutes from './routes/userRoutes.js'
 import monitorRoutes from './routes/monitorRoutes.js'
 import startMonitor from './jobs/uptimeJobs.js';
+import cors from 'cors';
+
+
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials:true
+}))
 
 dotenv.config()
 app.use(express.json())
