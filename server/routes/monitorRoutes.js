@@ -1,9 +1,10 @@
 import express from 'express'
-import { createMonitor } from '../controllers/monitorController.js'
+import { createMonitor, getMonitors } from '../controllers/monitorController.js'
 import { protect } from '../middleware/authMiddleware.js'
 
 const router = express.Router()
 
-router.use('/',protect,createMonitor)
+router.post('/',protect,createMonitor)
+router.get('/',protect,getMonitors)
 
 export default router;

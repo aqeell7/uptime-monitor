@@ -20,3 +20,13 @@ export const createMonitor = async (req,res)=>{
     return res.status(500).json({message: 'server error'})
   }
 } 
+
+export const getMonitors = async (req, res) => {
+  try {
+    console.log("Fetching monitors for user:", req.user._id);
+    const monitors = await Monitor.find({ user: req.user._id }); 
+    res.status(200).json(monitors);
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
