@@ -77,7 +77,7 @@ export const AuthProvider = ({ children }) => {
 
   const logoutUser = () => {
     localStorage.removeItem('token');
-    locatStorage.removeItem('user')
+    localStorage.removeItem('user')
     setUser(null)
     toast.success('Logged out');
   };

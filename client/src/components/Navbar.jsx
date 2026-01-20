@@ -1,10 +1,16 @@
 import { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import { LogOut, Activity } from 'lucide-react'; 
 
 const Navbar = () => {
   const { user, logoutUser } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logoutUser();
+    navigate('/login');
+  };
 
   return (
     <nav className="bg-white shadow-sm border-b">
@@ -20,7 +26,7 @@ const Navbar = () => {
           <div className="flex items-center space-x-4">
             <span className="text-gray-600">Welcome, {user?.name}</span>
             <button 
-              onClick={logoutUser}
+              onClick={handleLogout}
               className="flex items-center text-gray-600 hover:text-red-500 transition"
             >
               <LogOut className="h-5 w-5 mr-1" />
