@@ -18,8 +18,8 @@ const monitorSchema = new mongoose.Schema({
   },
   status:{
     type: String,
-    enum: ['UP','DOWN'],
-    default: 'UP'
+    enum: ['UP','DOWN', 'PENDING'],
+    default: 'PENDING'
   },
   lastCheckedAt:{
     type: Date,

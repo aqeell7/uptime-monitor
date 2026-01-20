@@ -4,7 +4,7 @@ import { checkUrl } from '../utils/uptimeHandler.js';
 
 const startMonitor = () => {
 
-  cron.schedule("* * * * *", async () => {
+  cron.schedule("*/15 * * * * *", async () => {
     console.log("Running monitor checks...");
 
     try {
@@ -13,7 +13,6 @@ const startMonitor = () => {
       for (const monitor of monitors) {
         const status = await checkUrl(monitor.url);
 
-        // Update properties
         monitor.status = status;
         monitor.lastCheckedAt = new Date(); 
 
