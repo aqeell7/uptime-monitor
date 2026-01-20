@@ -3,10 +3,12 @@ import Navbar from '../components/Navbar';
 import api from '../api/axios';
 import { Plus, Globe, Clock, CheckCircle, XCircle } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import CreateMonitorModal from '../components/createMonitorModal';
 
 const Dashboard = () => {
   const [monitors, setMonitors] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchMonitors = async () => {
     try {
@@ -28,13 +30,19 @@ const Dashboard = () => {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
 
+      <CreateMonitorModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        onSuccess={fetchMonitors} 
+      />
+
       <main className="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
        
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Your Monitors</h1>
           <button 
             className="flex items-center bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
-            onClick={() => toast('Modal coming soon!')}
+            onClick={() => setIsModalOpen(true)}
           >
             <Plus className="h-5 w-5 mr-2" />
             Add Monitor
@@ -75,7 +83,7 @@ const Dashboard = () => {
 
                     <div className="mt-4 pt-4 border-t flex items-center text-xs text-gray-400">
                         <Clock className="h-3 w-3 mr-1" />
-                        Last Checked: {monitor.lastChecked ? new Date(monitor.lastChecked).toLocaleString() : 'Never'}
+                        Last Checked: {monitor.lastCheckedAt ? new Date(monitor.lastCheckedAt).toLocaleString() : 'Never'}
                     </div>
                   </div>
                 ))
