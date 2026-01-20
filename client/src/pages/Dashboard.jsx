@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import api from '../api/axios';
-import { Plus, Globe, Clock, CheckCircle, XCircle } from 'lucide-react';
-import { toast } from 'react-hot-toast';
+import { Plus, Globe, Clock, CheckCircle, XCircle ,AlertCircle} from 'lucide-react';
 import CreateMonitorModal from '../components/createMonitorModal';
+import { formatDistanceToNow } from 'date-fns'
 
 const Dashboard = () => {
   const [monitors, setMonitors] = useState([]);
@@ -24,7 +24,34 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchMonitors();
+
+    const interval = setInterval(()=>{
+      fetchMonitors()
+    },2000)
+
+    return ()=> clearInterval(interval);
   }, []);
+
+  const getStatusBadge = (status)=>{
+    const styles = {
+      UP: 'bg-green-100 text-green-800',
+      DOWN: 'bg-red-100 text-red-800',
+      PENDING: 'bg-yellow-100 text-yellow-800'
+    }
+
+    const icons = {
+      UP: <CheckCircle className="h-3 w-3 mr-1"/>,
+      DOWN: <XCircle className="h-3 w-3 mr-1"/>,
+      PENDING: <AlertCircle className="h-3 w-3 mr-1"/>
+    };
+
+     return (
+        <div className={`px-3 py-1 rounded-full text-xs font-medium flex items-center ${styles[status] || styles.PENDING}`}>
+            {icons[status] || icons.PENDING}
+            {status}
+        </div>
+    );
+    }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -50,7 +77,7 @@ const Dashboard = () => {
         </div>
 
        
-        {loading ? (
+        {loading && monitors.length === 0 ? (
           <div className="text-center py-10">Loading your monitors...</div>
         ) : (
           
@@ -72,20 +99,17 @@ const Dashboard = () => {
                                 </a>
                             </div>
                         </div>
-                        
-                        <div className={`px-3 py-1 rounded-full text-xs font-medium flex items-center ${
-                            monitor.status === 'UP' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                        }`}>
-                             {monitor.status === 'UP' ? <CheckCircle className="h-3 w-3 mr-1"/> : <XCircle className="h-3 w-3 mr-1"/>}
-                             {monitor.status}
-                        </div>
+                        {getStatusBadge(monitor.status)}
+                       
                     </div>
 
                     <div className="mt-4 pt-4 border-t flex items-center text-xs text-gray-400">
-                        <Clock className="h-3 w-3 mr-1" />
-                        Last Checked: {monitor.lastCheckedAt ? new Date(monitor.lastCheckedAt).toLocaleString() : 'Never'}
-                    </div>
-                  </div>
+                    <Clock className="h-3 w-3 mr-1" />
+                    {monitor.lastCheckedAt 
+                        ? `Checked ${formatDistanceToNow(new Date(monitor.lastCheckedAt))} ago`
+                        : 'Waiting for check...'}
+                </div>
+                </div>
                 ))
             )}
           </div>
