@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import api from '../api/axios';
-import { Plus, Globe, Clock, CheckCircle, XCircle ,AlertCircle} from 'lucide-react';
+import { Plus, Globe, Clock, CheckCircle, XCircle ,AlertCircle, Trash2} from 'lucide-react';
 import CreateMonitorModal from '../components/createMonitorModal';
 import { formatDistanceToNow } from 'date-fns'
+import toast from 'react-hot-toast';
 
 const Dashboard = () => {
   const [monitors, setMonitors] = useState([]);
@@ -31,6 +32,18 @@ const Dashboard = () => {
 
     return ()=> clearInterval(interval);
   }, []);
+
+  const handleDelete = async (id) => {
+    if(!window.confirm('Are you sure you want to delete this '))return
+
+    try{
+      await api.delete(`/monitors/${id}`);
+      toast.success('Monitor delted')
+      fetchMonitors()
+    }catch(error){
+      toast.error('Could not delete monitor')
+    }
+  }
 
   const getStatusBadge = (status)=>{
     const styles = {
@@ -99,7 +112,13 @@ const Dashboard = () => {
                                 </a>
                             </div>
                         </div>
+
+                        <div className='flex items-center space-x-2'></div>
                         {getStatusBadge(monitor.status)}
+                         <button onClick={()=> handleDelete(monitor._id)}
+                         className='text-gray-400 hover:text-red-500 transition'>
+                          <Trash2 className='h-4 w-4'/>
+                         </button>
                        
                     </div>
 

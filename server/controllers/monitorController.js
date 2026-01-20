@@ -30,3 +30,22 @@ export const getMonitors = async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 };
+
+export const deleteMonitor = async (req,res)=>{
+  try{
+    const monitor = await Monitor.findById(req.params.id)
+
+    if(!monitor){
+      return res.status(404).json({message: 'Monitor not found'})
+    }
+
+    if(monitor.user.toString() !== req.user._id.toString()){
+      return res.status(404).json({message: 'Not authorised'})
+    }
+
+    await Monitor.deleteOne({_id: req.params.id})
+    res.status(200).json({message: 'Monitor removed'})
+  }catch(error){
+    res.status(500).json({message: 'server error'})
+  }
+}
