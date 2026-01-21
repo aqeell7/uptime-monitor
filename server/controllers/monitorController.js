@@ -23,7 +23,7 @@ export const createMonitor = async (req,res)=>{
 
 export const getMonitors = async (req, res) => {
   try {
-    console.log("Fetching monitors for user:", req.user._id);
+    // console.log("Fetching monitors for user:", req.user._id);
     const monitors = await Monitor.find({ user: req.user._id }); 
     res.status(200).json(monitors);
   } catch (error) {
