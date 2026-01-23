@@ -2,6 +2,7 @@ import cron from 'node-cron';
 import Monitor from '../models/Monitor.js';
 import { checkUrl } from '../utils/uptimeHandler.js';
 import sendNotification from '../utils/sendEmail.js';
+import Incident from '../models/Incident.js';
 
 const startMonitor = () => {
   cron.schedule("*/15 * * * * *", async () => {
@@ -14,6 +15,13 @@ const startMonitor = () => {
         const newStatus = await checkUrl(monitor.url);
 
         if (newStatus !== monitor.status) {
+
+          await Incident.create({
+            monitor: monitor._id,
+            user: monitor.user._id,
+            status: newStatus,
+            timestamp: new Date()
+          })
 
           const shouldNotify =
             monitor.status !== 'PENDING' || newStatus === 'DOWN';
