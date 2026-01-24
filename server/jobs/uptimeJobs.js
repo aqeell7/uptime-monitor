@@ -15,18 +15,18 @@ const startMonitor = () => {
         const newStatus = await checkUrl(monitor.url);
 
         if (newStatus !== monitor.status) {
+          
+          const isRelevantEvent = monitor.status !== 'PENDING' || newStatus === 'DOWN';
 
-          await Incident.create({
-            monitor: monitor._id,
-            user: monitor.user._id,
-            status: newStatus,
-            timestamp: new Date()
-          })
+          if (isRelevantEvent) {   
+            await Incident.create({
+              monitor: monitor._id,
+              user: monitor.user._id,
+              status: newStatus,
+              timestamp: new Date()
+            });
 
-          const shouldNotify =
-            monitor.status !== 'PENDING' || newStatus === 'DOWN';
-
-          if (shouldNotify) {
+            
             await sendNotification(
               monitor.user.email,
               monitor.name,
@@ -37,8 +37,7 @@ const startMonitor = () => {
 
           monitor.status = newStatus;
         }
-
-        monitor.lastCheckedAt = new Date();
+        monitor.lastCheckedAt = new Date(); 
         await monitor.save();
       }
     } catch (error) {
