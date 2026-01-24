@@ -1,3 +1,4 @@
+import Incident from "../models/Incident.js"
 import Monitor from "../models/Monitor.js"
 
 export const createMonitor = async (req,res)=>{
@@ -49,3 +50,17 @@ export const deleteMonitor = async (req,res)=>{
     res.status(500).json({message: 'server error'})
   }
 }
+
+
+export const getIncidents = async (req, res) => {
+  try {
+    const incidents = await Incident.find({ user: req.user._id })
+      .sort({ timestamp: -1 })
+      .limit(10)
+      .populate('monitor', 'name url'); 
+
+    res.status(200).json(incidents);
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
