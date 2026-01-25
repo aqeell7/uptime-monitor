@@ -10,11 +10,15 @@ const Dashboard = () => {
   const [monitors, setMonitors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [incidents, setIncidents] = useState([])
 
   const fetchMonitors = async () => {
     try {
-      const { data } = await api.get('/monitors'); 
-      setMonitors(data);
+      const monitorsRes = await api.get('/monitors');
+      const incidentsRes = await api.get('/monitors/incidents'); 
+      
+      setMonitors(monitorsRes.data);
+      setIncidents(incidentsRes.data);
     } catch (error) {
       console.error(error);
      
@@ -133,6 +137,47 @@ const Dashboard = () => {
             )}
           </div>
         )}
+
+                  <div className="mt-12 bg-white rounded-lg shadow overflow-hidden">
+            <div className="px-6 py-4 border-b">
+              <h3 className="text-lg font-bold text-gray-800">Recent Incident History</h3>
+            </div>
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Monitor</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Event</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {incidents.length === 0 ? (
+                  <tr>
+                    <td colSpan="3" className="px-6 py-4 text-center text-sm text-gray-500">No recent incidents recorded.</td>
+                  </tr>
+                ) : (
+                  incidents.map((incident) => (
+                    <tr key={incident._id}>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {incident.monitor?.name || 'Deleted Monitor'}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                          incident.status === 'DOWN' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
+                        }`}>
+                          {incident.status === 'DOWN' ? 'WENT DOWN' : 'RECOVERED'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {new Date(incident.timestamp).toLocaleString()}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+ 
       </main>
     </div>
   );
