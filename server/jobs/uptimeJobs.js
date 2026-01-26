@@ -3,6 +3,7 @@ import Monitor from '../models/Monitor.js';
 import { checkUrl } from '../utils/uptimeHandler.js';
 import sendNotification from '../utils/sendEmail.js';
 import Incident from '../models/Incident.js';
+import { ioInstance } from '../index.js';
 
 const startMonitor = () => {
   cron.schedule("*/15 * * * * *", async () => {
@@ -25,14 +26,23 @@ const startMonitor = () => {
               status: newStatus,
               timestamp: new Date()
             });
-
-            
+   
             await sendNotification(
               monitor.user.email,
               monitor.name,
               monitor.url,
               newStatus
             );
+
+            if (ioInstance) {
+              ioInstance
+                .to(monitor.user._id.toString())
+                .emit('monitor_update', {
+                  monitorId: monitor._id,
+                  status: newStatus,
+                  lastChecked: new Date()
+                });
+            }            
           }
 
           monitor.status = newStatus;
