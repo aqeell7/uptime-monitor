@@ -20,19 +20,12 @@ const startMonitor = () => {
           const isRelevantEvent = monitor.status !== 'PENDING' || newStatus === 'DOWN';
 
           if (isRelevantEvent) {   
-            await Incident.create({
+            const incident = await Incident.create({
               monitor: monitor._id,
               user: monitor.user._id,
               status: newStatus,
               timestamp: new Date()
             });
-   
-            await sendNotification(
-              monitor.user.email,
-              monitor.name,
-              monitor.url,
-              newStatus
-            );
 
             if (ioInstance) {
               ioInstance
@@ -44,6 +37,25 @@ const startMonitor = () => {
                   url: monitor.url
                 });
             }            
+
+            await sendNotification(
+              monitor.user.email,
+              monitor.name,
+              monitor.url,
+              newStatus
+            );
+
+            if (ioInstance) {
+              ioInstance.to(monitor.user._id.toString()).emit('incident_new', {
+                  _id: incident._id,
+                  status: incident.status,
+                  timestamp: incident.timestamp,
+                  monitor: {
+                      name: monitor.name,
+                      url: monitor.url
+                  }
+              });
+          } 
           }
 
           monitor.status = newStatus;

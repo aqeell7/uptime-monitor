@@ -50,8 +50,17 @@ const Dashboard = () => {
         );
     });
 
+    socket.on('incident_new', (newIncident) => {
+      setIncidents(currentIncidents => {
+          const updatedList = [newIncident, ...currentIncidents];
+          return updatedList.slice(0, 10);
+      });
+    });
+
     return () => {
         socket.disconnect();
+        socket.off('monitor_update');
+        socket.off('incident_new');
     };
   }, [user]);
 
