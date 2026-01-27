@@ -1,12 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext} from 'react';
 import Navbar from '../components/Navbar';
 import api from '../api/axios';
 import { Plus, Globe, Clock, CheckCircle, XCircle ,AlertCircle, Trash2} from 'lucide-react';
 import CreateMonitorModal from '../components/createMonitorModal';
 import { formatDistanceToNow } from 'date-fns'
 import toast from 'react-hot-toast';
+import { io } from 'socket.io-client';
+import AuthContext from '../context/AuthContext';
 
 const Dashboard = () => {
+  const { user } = useContext(AuthContext)
+
   const [monitors, setMonitors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,15 +31,29 @@ const Dashboard = () => {
     }
   };
 
-  useEffect(() => {
+ useEffect(() => {
     fetchMonitors();
 
-    const interval = setInterval(()=>{
-      fetchMonitors()
-    },2000)
+    const socket = io('http://localhost:5000');
 
-    return ()=> clearInterval(interval);
-  }, []);
+    if (user && user._id) {
+        socket.emit('join_room', user._id);
+    }
+
+    socket.on('monitor_update', (data) => {
+        setMonitors(currentMonitors => 
+            currentMonitors.map(m => 
+                m._id === data.monitorId 
+                    ? { ...m, status: data.status, lastCheckedAt: data.lastCheckedAt, url:data.url }
+                    : m
+            )
+        );
+    });
+
+    return () => {
+        socket.disconnect();
+    };
+  }, [user]);
 
   const handleDelete = async (id) => {
     if(!window.confirm('Are you sure you want to delete this '))return

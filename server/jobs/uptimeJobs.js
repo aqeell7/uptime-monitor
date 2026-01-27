@@ -40,7 +40,8 @@ const startMonitor = () => {
                 .emit('monitor_update', {
                   monitorId: monitor._id,
                   status: newStatus,
-                  lastChecked: new Date()
+                  lastCheckedAt: new Date(),
+                  url: monitor.url
                 });
             }            
           }
