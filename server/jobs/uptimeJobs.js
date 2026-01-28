@@ -25,18 +25,7 @@ const startMonitor = () => {
               user: monitor.user._id,
               status: newStatus,
               timestamp: new Date()
-            });
-
-            if (ioInstance) {
-              ioInstance
-                .to(monitor.user._id.toString())
-                .emit('monitor_update', {
-                  monitorId: monitor._id,
-                  status: newStatus,
-                  lastCheckedAt: new Date(),
-                  url: monitor.url
-                });
-            }            
+            });         
 
             await sendNotification(
               monitor.user.email,
@@ -60,6 +49,18 @@ const startMonitor = () => {
 
           monitor.status = newStatus;
         }
+
+        if (ioInstance) {
+          ioInstance
+            .to(monitor.user._id.toString())
+            .emit('monitor_update', {
+              monitorId: monitor._id,
+              status: newStatus,
+              lastCheckedAt: new Date(),
+              url: monitor.url
+            });
+        }   
+
         monitor.lastCheckedAt = new Date(); 
         await monitor.save();
       }
