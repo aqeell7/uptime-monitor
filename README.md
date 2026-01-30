@@ -1,5 +1,16 @@
-Uptime Monitor 🚀
+# Uptime Monitor 🚀
+
+![Node.js](https://img.shields.io/badge/Node.js-18-green)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-brightgreen)
+![Socket.io](https://img.shields.io/badge/Socket.io-Realtime-black)
+![MERN](https://img.shields.io/badge/Stack-MERN-blue)
+
+
 A full-stack, real-time website monitoring tool built with the MERN stack. This application allows users to track the status, response times, and availability of multiple URLs simultaneously with live updates and automated background polling.
+
+<p align="center">
+  <img src="./client/src/assets/Dashboard-2.png" alt="Uptime Monitor Dashboard" width="900" />
+</p>
 
 🌟 Features
 Real-Time Dashboard: View live status updates (Up/Down) and latency metrics without refreshing the page.
