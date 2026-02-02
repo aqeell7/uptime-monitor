@@ -1,21 +1,33 @@
 version: '3.8'
 
 services:
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db 
   server:
     build: ./server
     ports:
       - "5000:5000"
     environment:
-      - MONGO_URI=${MONGO_URI}
+
+      - MONGO_URI=mongodb://mongo:27017/uptime-db 
       - JWT_SECRET=${JWT_SECRET}
       - EMAIL_USER=${EMAIL_USER}
       - EMAIL_PASS=${EMAIL_PASS}
+    depends_on:
+      - mongo
     restart: always
 
   client:
     build: ./client
     ports:
-      - "80:80" 
+      - "80:80"
     depends_on:
       - server
     restart: always
+
+volumes:
+  mongo-data:
