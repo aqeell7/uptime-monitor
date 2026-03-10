@@ -1,1 +1,25 @@
 @import "tailwindcss";
+
+@theme {
+  --color-background: #F5F5F0;
+  --color-charcoal: #2D2D2D;
+  --color-terracotta: #ae5630;
+  --color-surface-light: #FFFFFF;
+  --color-surface-dark: #1A1A1A;
+  
+  --font-sans: "IBM Plex Sans", sans-serif;
+  --font-serif: "Playfair Display", serif;
+  
+  --animate-fade-in: fadeIn 0.8s ease-out forwards;
+  --animate-fade-up: fadeUp 0.8s ease-out forwards;
+
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  @keyframes fadeUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+}

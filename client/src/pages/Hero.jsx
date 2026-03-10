@@ -29,7 +29,7 @@ const Hero = () => {
                     <div className="mt-12 flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 animate-fade-up" style={{ animationDelay: '0.2s' }}>
                         <Link
                             to="/register"
-                            className="group flex items-center bg-charcoal text-white px-8 py-4 rounded-lg font-medium hover:bg-black transition-all shadow-md hover:shadow-lg active:scale-95"
+                            className="group flex items-center bg-[#2D2D2D] text-[#F5F5F0] px-8 py-4 rounded-lg font-medium transition-all shadow-md hover:shadow-lg active:scale-95"
                         >
                             Start Monitoring
                             <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
