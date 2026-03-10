@@ -2,10 +2,11 @@ import { useEffect, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
+import { GoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const { loginUser, user } = useContext(AuthContext);
+  const { loginUser, googleLogin, user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,6 +17,10 @@ const Login = () => {
 
   const onSubmit = (data) => {
     loginUser(data.email, data.password);
+  };
+
+  const handleGoogleSuccess = (credentialResponse) => {
+    googleLogin(credentialResponse.credential);
   };
 
   return (
@@ -54,7 +59,29 @@ const Login = () => {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-gray-600">
+        <div className="mt-6">
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-200"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-white text-gray-500">Or continue with</span>
+            </div>
+          </div>
+
+          <div className="mt-6 flex justify-center">
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={() => console.log('Login Failed')}
+              theme="outline"
+              size="large"
+              shape="rectangular"
+              width="100%"
+            />
+          </div>
+        </div>
+
+        <p className="mt-8 text-center text-sm text-gray-600">
           Don't have an account? <Link to="/register" className="text-terracotta hover:underline font-medium">Register</Link>
         </p>
       </div>

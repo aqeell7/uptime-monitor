@@ -2,10 +2,11 @@ import { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import AuthContext from "../context/AuthContext"
 import { useNavigate, Link } from "react-router-dom"
+import { GoogleLogin } from '@react-oauth/google';
 
 export const Register = () => {
   const { register, handleSubmit, formState: { errors } } = useForm()
-  const { registerUser, user } = useContext(AuthContext)
+  const { registerUser, googleLogin, user } = useContext(AuthContext)
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,6 +18,10 @@ export const Register = () => {
   const onSubmit = (data) => {
     registerUser(data.name, data.email, data.password)
   }
+
+  const handleGoogleSuccess = (credentialResponse) => {
+    googleLogin(credentialResponse.credential);
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background font-sans text-gray-900 selection:bg-terracotta selection:text-white p-4">
@@ -66,10 +71,33 @@ export const Register = () => {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-gray-600">
+        <div className="mt-6">
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-200"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-white text-gray-500">Or continue with</span>
+            </div>
+          </div>
+
+          <div className="mt-6 flex justify-center">
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={() => console.log('Signup Failed')}
+              theme="outline"
+              size="large"
+              shape="rectangular"
+              width="100%"
+              text="signup_with"
+            />
+          </div>
+        </div>
+
+        <p className="mt-8 text-center text-sm text-gray-600">
           Already have an account? <Link to="/login" className="text-terracotta hover:underline font-medium">Login</Link>
         </p>
       </div>
     </div>
   );
-} 
+}
