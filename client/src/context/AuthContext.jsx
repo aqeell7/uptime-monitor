@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     setLoading(false);
-   }, []);
+  }, []);
 
   const loginUser = async (email, password) => {
     try {
@@ -25,16 +25,16 @@ export const AuthProvider = ({ children }) => {
       const data = res.data;
 
       localStorage.setItem('token', data.token);
-      localStorage.setItem('user',JSON.stringify({
+      localStorage.setItem('user', JSON.stringify({
         _id: data._id,
         name: data.name,
-        email:data.email
+        email: data.email
       }))
 
       setUser({
-      _id: data._id,
-      name: data.name,
-      email: data.email
+        _id: data._id,
+        name: data.name,
+        email: data.email
       });
 
       toast.success('Logged in!');
@@ -75,6 +75,31 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const googleLogin = async (credential) => {
+    try {
+      const res = await api.post('/users/google', { credential });
+      const data = res.data;
+
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify({
+        _id: data._id,
+        name: data.name,
+        email: data.email
+      }));
+
+      setUser({
+        _id: data._id,
+        name: data.name,
+        email: data.email
+      });
+
+      toast.success('Logged in with Google!');
+    } catch (error) {
+      const message = error.response?.data?.message || 'Google Login failed';
+      toast.error(message);
+    }
+  };
+
   const logoutUser = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user')
@@ -88,6 +113,7 @@ export const AuthProvider = ({ children }) => {
         user,
         loginUser,
         registerUser,
+        googleLogin,
         logoutUser,
         loading,
       }}
