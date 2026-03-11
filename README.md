@@ -8,7 +8,7 @@ A full-stack, real-time website monitoring tool built with the MERN stack. This 
 ![MERN](https://img.shields.io/badge/Stack-MERN-blue)
 
 <p align="center">
-  <img src="./client/src/assets/Dashboard.png" alt="Uptime Monitor Dashboard" width="900" />
+  <img src="./client/src/assets/uptime-monitor-dash-1.png" alt="Uptime Monitor Dashboard" width="900" />
 </p>
 
 ## ✨ Key Features
