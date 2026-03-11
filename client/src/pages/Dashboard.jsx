@@ -34,7 +34,11 @@ const Dashboard = () => {
   useEffect(() => {
     fetchMonitors();
 
-    const socket = io('http://localhost:5000');
+    const socketUrl = import.meta.env.VITE_API_URL 
+  ? import.meta.env.VITE_API_URL.replace('/api', '') 
+  : 'http://localhost:5000';
+
+    const socket = io(socketUrl);
 
     if (user && user._id) {
       socket.emit('join_room', user._id);
@@ -115,7 +119,7 @@ const Dashboard = () => {
             <p className="text-gray-500 mt-2 text-sm">Monitor the health and uptime of your critical services.</p>
           </div>
           <button
-            className="mt-4 sm:mt-0 flex items-center justify-center bg-[#2D2D2D] text-[#F5F5F0] px-5 py-2.5 rounded-lg font-medium transition-all shadow-sm hover:shadow active:scale-95"
+            className="mt-4 sm:mt-0 flex items-center justify-center bg-charcoal text-background px-5 py-2.5 rounded-lg font-medium transition-all shadow-sm hover:shadow active:scale-95"
             onClick={() => setIsModalOpen(true)}
           >
             <Plus className="h-4 w-4 mr-2" />

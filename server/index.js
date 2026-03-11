@@ -8,7 +8,7 @@ import cors from 'cors';
 import { Server } from 'socket.io';
 import http from 'http'
 
-dotenv.config()
+dotenv.config({ path: '../.env' })
 connectDb()
 
 const app = express()

@@ -32,7 +32,12 @@ jobs:
       - name: Build and push Client
         uses: docker/build-push-action@v4
         with:
-          context: ./client 
+          context: ./client
           file: ./client/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/uptime-monitor-client:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/uptime-client:latest
+          # 🆕 Pass the GitHub secrets into the Dockerfile ARGs
+          build-args: |
+            env:
+              VITE_API_URL: ${{ secrets.VITE_API_URL }}
+              VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
