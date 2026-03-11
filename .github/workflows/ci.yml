@@ -36,6 +36,4 @@ jobs:
           file: ./client/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/uptime-monitor-client:latest
-          build-args: |
-              VITE_API_URL: ${{ secrets.VITE_API_URL }}
-              VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
+  

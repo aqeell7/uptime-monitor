@@ -34,10 +34,10 @@ const Dashboard = () => {
   useEffect(() => {
     fetchMonitors();
 
-    const socketUrl = import.meta.env.VITE_API_URL 
-  ? import.meta.env.VITE_API_URL.replace('/api', '') 
-  : 'http://localhost:5000';
-
+    const socketUrl = import.meta.env.MODE === 'production'
+    ? 'https://monitor.aqeelahmed.co.in'
+    : 'http://localhost:5000';
+  
     const socket = io(socketUrl);
 
     if (user && user._id) {
